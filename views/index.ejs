@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <main class="container">
+    <h1><%= title %></h1>
+
+    <form class="card" action="/forecast" method="POST">
+      <label for="city">City</label>
+      <div class="row">
+        <input id="city" name="city" type="text" placeholder="e.g. Jerusalem" value="<%= city %>" required />
+        <button type="submit">Get forecast</button>
+      </div>
+      <p class="hint">Tip: you can type city + country (e.g. “Haifa, Israel”).</p>
+    </form>
+
+    <% if (error) { %>
+      <section class="card error">
+        <strong>Error:</strong> <%= error %>
+      </section>
+    <% } %>
+
+    <% if (locationLabel && forecastDays) { %>
+      <section class="card">
+        <h2><%= locationLabel %></h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Weather</th>
+                <th>Min (°C)</th>
+                <th>Max (°C)</th>
+                <th>Precip. chance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% forecastDays.forEach((d) => { %>
+                <tr>
+                  <td><%= d.date %></td>
+                  <td><span class="emoji"><%= d.emoji %></span> <%= d.summary %></td>
+                  <td><%= Math.round(d.tMin) %></td>
+                  <td><%= Math.round(d.tMax) %></td>
+                  <td><%= d.precip != null ? d.precip + "%" : "—" %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="footnote">Data source: Open‑Meteo (geocoding + forecast).</p>
+      </section>
+    <% } %>
+  </main>
+  <footer><p>© Guy Bensimhon</p></footer>
+</body>
+
+</html>
